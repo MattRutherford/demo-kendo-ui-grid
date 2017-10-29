@@ -19,6 +19,7 @@
 .idea
 .ruby-gemset
 .ruby-version
+.byebug_history
 
 # ignore telerik code due to license restrictions
 public/javascripts/kendo.all.min.js

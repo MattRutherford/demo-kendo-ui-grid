@@ -69,9 +69,15 @@ class UsersController < ApplicationController
   def paginated_sort
     @users = User.all
     if(params['sort'])
-      field = params.dig("sort", "0", "field")
-      dir = params.dig("sort", "0", "dir")
-      @users = @users.order(field.to_sym => dir.to_s)
+      # Prepare to build a list of one or more sort criteria
+      order_args = []
+      params['sort'].each_pair do |k, v|
+        # Add each cloumn and sort direction to the argument list
+        order_args.push("#{v[:field]} #{v[:dir]}")
+      end
+      # Join the array to return a string in the required format as a single argument
+      # eg: @users.order("name asc, age asc, email asc")
+      @users = @users.order(order_args.join(', '))
     end
     @users = @users.paginate(page: params[:page], per_page: params[:pageSize])
     @total = @users.count #.total_pages
